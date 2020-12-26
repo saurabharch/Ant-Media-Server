@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 
+import io.antmedia.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,10 +39,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import io.antmedia.AntMediaApplicationAdapter;
-import io.antmedia.AppSettings;
-import io.antmedia.IApplicationAdaptorFactory;
-import io.antmedia.RecordType;
 import io.antmedia.cluster.IClusterNotifier;
 import io.antmedia.datastore.db.DataStore;
 import io.antmedia.datastore.db.DataStoreFactory;
@@ -145,6 +142,7 @@ public abstract class RestServiceBase {
 	protected ApplicationContext appCtx;
 	protected IScope scope;
 	protected AntMediaApplicationAdapter appInstance;
+	protected ArrayList<BrowserStreamMerger> mergerList;
 
 	private AppSettings appSettings;
 
@@ -235,6 +233,37 @@ public abstract class RestServiceBase {
 			dbStore = getDataStoreFactory().getDataStore();
 		}
 		return dbStore;
+	}
+	public boolean startMerging(String roomName,String url){
+		BrowserStreamMerger merger;
+		if(url == null){
+			merger = new BrowserStreamMerger(roomName);
+		}else{
+			merger = new BrowserStreamMerger(roomName, url);
+		}
+		if(!(merger.isRunning())) {
+			merger.init();
+			this.mergerList.add(merger);
+			return true;
+		}else{
+			logger.warn("Headless chrome already running in a process");
+			return false;
+		}
+	}
+	public boolean stopMerging(String roomName){
+		BrowserStreamMerger merger;
+		if(this.mergerList != null){
+			for(int i = 0; i < this.mergerList.size(); i++) {
+				if (this.mergerList.get(i).getRoomId().equals(roomName)) {
+					this.mergerList.get(i).stop();
+					this.mergerList.remove(i);
+					return true;
+				}
+			}
+		}
+		logger.warn("Couldn't find driver appended to the room {}", roomName);
+		return false;
+
 	}
 
 	public void setDataStore(DataStore dataStore) {

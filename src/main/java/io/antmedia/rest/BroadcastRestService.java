@@ -252,6 +252,33 @@ public class BroadcastRestService extends RestServiceBase{
 		return getDataStore().getBroadcastList(offset, size, typeBy, sortBy, orderBy, search);
 	}
 
+	@ApiOperation(value = "Starts the headless chrome to merge streams on canvas", notes = "",responseContainer = "List", response = Broadcast.class)
+	@PUT
+	@Path("/startMerge/{room_name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Result headlessMergingStart(@ApiParam(value = "Room name to start merging streams inside", required = true) @PathParam("room_name") String room_name,
+							   @ApiParam(value = "URL of the server(default is localhost)", required = false) @QueryParam("url") String url)
+	{
+		boolean success = startMerging(room_name, url);
+		if(success) {
+			return new Result(true, "Started merging");
+		}else{
+			return new Result(false, "ChromeDriver couldn't started");
+		}
+	}
+	@ApiOperation(value = "Stops the headless chrome to merge streams on canvas", notes = "",responseContainer = "List", response = Broadcast.class)
+	@PUT
+	@Path("/stopMerge/{room_name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Result headlessMergingStop(@ApiParam(value = "Room name to stop merging streams inside", required = true) @PathParam("room_name") String room_name)
+	{
+		boolean success = stopMerging(room_name);
+		if(success) {
+			return new Result(true, "Stopped merging");
+		}else{
+			return new Result(false, "ChromeDriver couldn't stopped gracefully, check the processes");
+		}
+	}
 
 	@ApiOperation(value = "Updates the Broadcast objects fields if it's not null." + 
 			" The updated fields are as follows: name, description, userName, password, IP address, streamUrl of the broadcast. " + 
