@@ -109,46 +109,4 @@ public class BrowserStreamMerger {
             stop();
         }
     }
-    /*public static void main(String[] args){
-        /*WebDriver driver;
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions chrome_options = new ChromeOptions();
-        chrome_options.addArguments("--disable-extensions");
-        chrome_options.addArguments("--disable-gpu");
-        chrome_options.addArguments("--headless");
-        chrome_options.addArguments("--no-sandbox");
-        driver = new ChromeDriver(chrome_options);
-        driver.get("http://localhost:5080/LiveApp/merge_streams.html");
-        String title = driver.getTitle();
-        System.out.println(title);
-        if(driver != null && title.equals("Ant Media Server WebRTC Conference Room Merge")) {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            }catch(Exception e){
-                System.out.println("olmadı");
-            }
-
-            driver.findElement(By.xpath("//*[@id='join_publish_button']")).click();
-            try {
-                TimeUnit.SECONDS.sleep(2);
-                //driver.switchTo().alert().accept();
-                driver.findElement(By.xpath("//*[@id='start_publish_button']")).click();
-            }catch(Exception e){
-                System.out.println("olmadı");
-            }
-            //String alert = driver.switchTo().alert().getText();
-           // System.out.println(alert);
-            try {
-                TimeUnit.SECONDS.sleep(15);
-            }catch(Exception e){
-                System.out.println("olmadı");
-            }
-            driver.close();
-        }
-        BrowserStreamMerger merger = new BrowserStreamMerger("https://ovh36.antmedia.io:5443/LiveApp/merge_streams.html");
-        merger.init();
-        //merger.delay(10);
-        //merger.stop();
-    }*/
-
 }
