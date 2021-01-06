@@ -18,7 +18,7 @@ public class BrowserStreamMerger {
     protected String roomId;
 
     public BrowserStreamMerger(String roomId){
-        this.url = "http://localhost:5080/LiveApp/merge_streams.html";
+        this.url = "http://localhost:5080/LiveApp/merge_streams.html?roomName=room1";
         WebDriverManager.chromedriver().setup();
         this.roomId = roomId;
     }
@@ -55,10 +55,6 @@ public class BrowserStreamMerger {
             stop();
         }
         delay(3);
-        this.driver.findElement(By.xpath("//*[@id='start_publish_button']")).click();
-        if(checkAlert() == false){
-            stop();
-        }
     }
     public String getRoomId(){
         return this.roomId;
