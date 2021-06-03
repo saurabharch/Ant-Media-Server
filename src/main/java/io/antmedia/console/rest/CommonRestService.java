@@ -103,6 +103,11 @@ public class CommonRestService {
 
 	public static final String NODE_GROUP = "nodeGroup";
 
+	public static final String SETTINGS_JWT_MANAGEMENT_SECRET_KEY = "server.jwtManagementSecretKey";
+
+	public static final String SETTINGS_JWT_MANAGEMENT_CONTROL_ENABLED = "server.jwtManagementControlEnabled";
+
+
 	Gson gson = new Gson();
 
 	private AbstractConsoleDataStore dataStore;
@@ -753,6 +758,7 @@ public class CommonRestService {
 	public String changeServerSettings(ServerSettings serverSettings){
 
 		PreferenceStore store = new PreferenceStore(RED5_PROPERTIES_PATH);
+		logger.info("Change server settings is called");
 
 		String serverName = "";
 		String licenceKey = "";
@@ -775,6 +781,12 @@ public class CommonRestService {
 
 		store.put(NODE_GROUP, String.valueOf(serverSettings.getNodeGroup()));
 		getServerSettingsInternal().setNodeGroup(serverSettings.getNodeGroup());
+
+		store.put(SETTINGS_JWT_MANAGEMENT_SECRET_KEY, String.valueOf(serverSettings.getJwtManagementSecretKey()));
+		logger.info("JWT Management Secret Key is {}",serverSettings.getJwtManagementSecretKey());
+
+		store.put(SETTINGS_JWT_MANAGEMENT_CONTROL_ENABLED, String.valueOf(serverSettings.isJwtManagementControlEnabled()));
+
 
 		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 

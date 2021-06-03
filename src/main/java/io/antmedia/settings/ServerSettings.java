@@ -57,6 +57,11 @@ public class ServerSettings implements ApplicationContextAware {
 
 	private static final String SETTINGS_SERVER_DEFAULT_HTTP_PORT = "http.port";
 
+	public static final String SETTINGS_JWT_MANAGEMENT_SECRET_KEY = "server.jwtManagementSecretKey";
+
+	public static final String SETTINGS_JWT_MANAGEMENT_CONTROL_ENABLED = "server.jwtManagementControlEnabled";
+
+
 	private String allowedDashboardCIDR;
 
 	@JsonIgnore
@@ -91,6 +96,18 @@ public class ServerSettings implements ApplicationContextAware {
 	 * Native Log Level is used for ffmpeg and WebRTC logs
 	 */
 	private String nativeLogLevel = LOG_LEVEL_WARN;
+
+	/**
+	 * Server JWT secret key
+	 */
+	@Value( "${"+SETTINGS_JWT_MANAGEMENT_SECRET_KEY+":#{null}}" )
+	private String jwtManagementSecretKey;
+
+	/**
+	 * Management JWT Control Enabled
+	 */
+	@Value( "${"+SETTINGS_JWT_MANAGEMENT_CONTROL_ENABLED+":false}" )
+	private boolean jwtManagementControlEnabled;
 
 	@Value( "${"+SETTINGS_HEART_BEAT_ENABLED+":true}" )
 	private boolean heartbeatEnabled; 
@@ -261,6 +278,22 @@ public class ServerSettings implements ApplicationContextAware {
 			fillFromInput(allowedDashboardCIDR, allowedCIDRList);
 		}
 		return allowedCIDRList;
+	}
+
+	public String getJwtManagementSecretKey() {
+		return jwtManagementSecretKey;
+	}
+
+	public void setJwtManagementSecretKey(String jwtSecretKey) {
+		this.jwtManagementSecretKey = jwtManagementSecretKey;
+	}
+
+	public boolean isJwtManagementControlEnabled() {
+		return jwtManagementControlEnabled;
+	}
+
+	public void setJwtManagementControlEnabled(boolean jwtManagementControlEnabled) {
+		this.jwtManagementControlEnabled = jwtManagementControlEnabled;
 	}
 
 	/**
