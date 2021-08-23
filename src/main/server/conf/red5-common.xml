@@ -185,8 +185,7 @@
        <property name="kafkaBrokers" value="${server.kafka_brokers}" />
        <property name="minFreeRamSize" value="${server.min_free_ram}"/>
    	</bean>
-   	
-   	
     
-
+    <bean id="srtHandler"
+          class="#{ T(io.antmedia.rest.RestServiceBase).isEnterprise() ? 'io.antmedia.enterprise.protocol.srt.SRTHandler' : 'io.antmedia.webrtc.MockWebRTCAdaptor' }"/>
 </beans>
